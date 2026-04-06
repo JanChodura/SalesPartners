@@ -3,6 +3,7 @@ package com.jzchodura.salespartners.service;
 import com.jzchodura.salespartners.model.SalesPartner;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SalesPartnerService {
 
@@ -10,7 +11,7 @@ public interface SalesPartnerService {
 
     List<SalesPartner> getPartners();
 
-    SalesPartner getPartnerDetail(Long partnerId);
+    SalesPartner getPartnerDetail(UUID partnerId);
 
-    SalesPartner updatePartner(Long partnerId, SalesPartner partner);
+    SalesPartner updatePartner(UUID partnerId, SalesPartner partner);
 }

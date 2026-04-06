@@ -1,7 +1,9 @@
 package com.jzchodura.salespartners.model;
 
+import java.util.UUID;
+
 public record Contact(
-    Long id,
+    UUID id,
     String firstName,
     String lastName,
     ContactPosition position,

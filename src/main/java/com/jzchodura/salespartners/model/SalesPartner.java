@@ -1,9 +1,10 @@
 package com.jzchodura.salespartners.model;
 
 import java.util.List;
+import java.util.UUID;
 
 public record SalesPartner(
-    Long id,
+    UUID id,
     List<Identifier> identifiers,
     String name,
     List<Address> addresses,

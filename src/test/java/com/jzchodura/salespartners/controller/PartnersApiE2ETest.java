@@ -51,8 +51,8 @@ class PartnersApiE2ETest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PartnerRequestUtil.createPartnerRequest())))
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", "http://localhost/partners/1"))
-            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(header().string("Location", "http://localhost/partners/" + TestIdsUtil.PARTNER_ID))
+            .andExpect(jsonPath("$.id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$.name").value("Acme"))
             .andExpect(jsonPath("$.partnerStatus").value("NEW"))
             .andExpect(jsonPath("$.identifiers[0].value").value("CZ12345678"))
@@ -64,7 +64,7 @@ class PartnersApiE2ETest {
     void getPartners_returnsPartnerList() throws Exception {
         mockMvc.perform(get("/partners"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(jsonPath("$[0].id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$[0].name").value("Acme"))
             .andExpect(jsonPath("$[0].partnerStatus").value("NEW"));
     }
@@ -73,7 +73,7 @@ class PartnersApiE2ETest {
     void getPartnerDetail_returnsPartnerDetail() throws Exception {
         mockMvc.perform(get("/partners/{partnerId}", TestIdsUtil.PARTNER_ID))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$.name").value("Acme"))
             .andExpect(jsonPath("$.partnerStatus").value("NEW"))
             .andExpect(jsonPath("$.contacts[0].email").value("jan.novak@example.com"));
@@ -85,7 +85,7 @@ class PartnersApiE2ETest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PartnerRequestUtil.updatePartnerRequest())))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$.name").value("Acme Gold"))
             .andExpect(jsonPath("$.partnerStatus").value("GOLD"))
             .andExpect(jsonPath("$.addresses[0].city").value("Brno"))
@@ -98,8 +98,8 @@ class PartnersApiE2ETest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ContactRequestUtil.createContactRequest())))
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", "http://localhost/partners/1/contacts/10"))
-            .andExpect(jsonPath("$.id").value(10))
+            .andExpect(header().string("Location", "http://localhost/partners/" + TestIdsUtil.PARTNER_ID + "/contacts/" + TestIdsUtil.CONTACT_ID))
+            .andExpect(jsonPath("$.id").value(TestIdsUtil.CONTACT_ID.toString()))
             .andExpect(jsonPath("$.firstName").value("Jan"))
             .andExpect(jsonPath("$.position").value("SALES"))
             .andExpect(jsonPath("$.primary").value(true));
@@ -111,7 +111,7 @@ class PartnersApiE2ETest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ContactRequestUtil.updateContactRequest())))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(10))
+            .andExpect(jsonPath("$.id").value(TestIdsUtil.CONTACT_ID.toString()))
             .andExpect(jsonPath("$.firstName").value("Petr"))
             .andExpect(jsonPath("$.position").value("ACCOUNT_MANAGER"))
             .andExpect(jsonPath("$.primary").value(false));
@@ -157,12 +157,12 @@ class PartnersApiE2ETest {
                 }
 
                 @Override
-                public SalesPartner getPartnerDetail(Long partnerId) {
+                public SalesPartner getPartnerDetail(java.util.UUID partnerId) {
                     return SalesPartnerUtil.createdPartner();
                 }
 
                 @Override
-                public SalesPartner updatePartner(Long partnerId, SalesPartner partner) {
+                public SalesPartner updatePartner(java.util.UUID partnerId, SalesPartner partner) {
                     return SalesPartnerUtil.updatedPartner();
                 }
             };
@@ -173,17 +173,17 @@ class PartnersApiE2ETest {
         ContactService contactService() {
             return new ContactService() {
                 @Override
-                public Contact add(Long partnerId, Contact contact) {
+                public Contact add(java.util.UUID partnerId, Contact contact) {
                     return ContactUtil.createdContact();
                 }
 
                 @Override
-                public Contact update(Long partnerId, Long contactId, Contact contact) {
+                public Contact update(java.util.UUID partnerId, java.util.UUID contactId, Contact contact) {
                     return ContactUtil.updatedContact();
                 }
 
                 @Override
-                public void delete(Long partnerId, Long contactId) {
+                public void delete(java.util.UUID partnerId, java.util.UUID contactId) {
                 }
             };
         }

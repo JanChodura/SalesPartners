@@ -9,17 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
 
-    private final Map<Long, SalesPartner> partners = new HashMap<>();
-    private long partnerSequence = 0L;
-    private long contactSequence = 0L;
+    private final Map<UUID, SalesPartner> partners = new HashMap<>();
 
     @Override
     public synchronized SalesPartner createPartner(SalesPartner partner) {
-        long partnerId = ++partnerSequence;
+        UUID partnerId = UUID.randomUUID();
         SalesPartner createdPartner = new SalesPartner(
             partnerId,
             safeList(partner.identifiers()),
@@ -38,12 +38,12 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
     }
 
     @Override
-    public synchronized java.util.Optional<SalesPartner> findPartnerById(Long partnerId) {
-        return java.util.Optional.ofNullable(partners.get(partnerId));
+    public synchronized Optional<SalesPartner> findPartnerById(UUID partnerId) {
+        return Optional.ofNullable(partners.get(partnerId));
     }
 
     @Override
-    public synchronized SalesPartner updatePartner(Long partnerId, SalesPartner partner) {
+    public synchronized SalesPartner updatePartner(UUID partnerId, SalesPartner partner) {
         SalesPartner existingPartner = getRequiredPartner(partnerId);
         SalesPartner updatedPartner = new SalesPartner(
             partnerId,
@@ -58,10 +58,10 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
     }
 
     @Override
-    public synchronized Contact addContact(Long partnerId, Contact contact) {
+    public synchronized Contact addContact(UUID partnerId, Contact contact) {
         SalesPartner partner = getRequiredPartner(partnerId);
         Contact createdContact = new Contact(
-            ++contactSequence,
+            UUID.randomUUID(),
             contact.firstName(),
             contact.lastName(),
             contact.position(),
@@ -78,7 +78,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
     }
 
     @Override
-    public synchronized Contact updateContact(Long partnerId, Long contactId, Contact contact) {
+    public synchronized Contact updateContact(UUID partnerId, UUID contactId, Contact contact) {
         SalesPartner partner = getRequiredPartner(partnerId);
         List<Contact> updatedContacts = new ArrayList<>(safeList(partner.contacts()));
 
@@ -105,7 +105,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
     }
 
     @Override
-    public synchronized void deleteContact(Long partnerId, Long contactId) {
+    public synchronized void deleteContact(UUID partnerId, UUID contactId) {
         SalesPartner partner = getRequiredPartner(partnerId);
         List<Contact> updatedContacts = safeList(partner.contacts()).stream()
             .filter(contact -> !contact.id().equals(contactId))
@@ -118,7 +118,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
         partners.put(partnerId, withContacts(partner, updatedContacts));
     }
 
-    private SalesPartner getRequiredPartner(Long partnerId) {
+    private SalesPartner getRequiredPartner(UUID partnerId) {
         SalesPartner partner = partners.get(partnerId);
         if (partner == null) {
             throw new NoSuchElementException("Partner with id %s was not found.".formatted(partnerId));

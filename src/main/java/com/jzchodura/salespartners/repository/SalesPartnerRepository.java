@@ -5,6 +5,7 @@ import com.jzchodura.salespartners.model.SalesPartner;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface SalesPartnerRepository {
 
@@ -12,13 +13,13 @@ public interface SalesPartnerRepository {
 
     List<SalesPartner> findAllPartners();
 
-    Optional<SalesPartner> findPartnerById(Long partnerId);
+    Optional<SalesPartner> findPartnerById(UUID partnerId);
 
-    SalesPartner updatePartner(Long partnerId, SalesPartner partner);
+    SalesPartner updatePartner(UUID partnerId, SalesPartner partner);
 
-    Contact addContact(Long partnerId, Contact contact);
+    Contact addContact(UUID partnerId, Contact contact);
 
-    Contact updateContact(Long partnerId, Long contactId, Contact contact);
+    Contact updateContact(UUID partnerId, UUID contactId, Contact contact);
 
-    void deleteContact(Long partnerId, Long contactId);
+    void deleteContact(UUID partnerId, UUID contactId);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class SalesPartnerServiceImpl implements SalesPartnerService {
@@ -36,13 +37,13 @@ public class SalesPartnerServiceImpl implements SalesPartnerService {
     }
 
     @Override
-    public SalesPartner getPartnerDetail(Long partnerId) {
+    public SalesPartner getPartnerDetail(UUID partnerId) {
         return salesPartnerRepository.findPartnerById(partnerId)
             .orElseThrow(() -> new NoSuchElementException("Partner with id %s was not found.".formatted(partnerId)));
     }
 
     @Override
-    public SalesPartner updatePartner(Long partnerId, SalesPartner partner) {
+    public SalesPartner updatePartner(UUID partnerId, SalesPartner partner) {
         return salesPartnerRepository.updatePartner(partnerId, partner);
     }
 }

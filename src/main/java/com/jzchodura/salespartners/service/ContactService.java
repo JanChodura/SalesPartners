@@ -2,11 +2,13 @@ package com.jzchodura.salespartners.service;
 
 import com.jzchodura.salespartners.model.Contact;
 
+import java.util.UUID;
+
 public interface ContactService {
 
-    Contact add(Long partnerId, Contact contact);
+    Contact add(UUID partnerId, Contact contact);
 
-    Contact update(Long partnerId, Long contactId, Contact contact);
+    Contact update(UUID partnerId, UUID contactId, Contact contact);
 
-    void delete(Long partnerId, Long contactId);
+    void delete(UUID partnerId, UUID contactId);
 }

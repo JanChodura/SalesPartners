@@ -4,6 +4,8 @@ import com.jzchodura.salespartners.model.Contact;
 import com.jzchodura.salespartners.repository.SalesPartnerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ContactServiceImpl implements ContactService {
 
@@ -14,17 +16,17 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact add(Long partnerId, Contact contact) {
+    public Contact add(UUID partnerId, Contact contact) {
         return salesPartnerRepository.addContact(partnerId, contact);
     }
 
     @Override
-    public Contact update(Long partnerId, Long contactId, Contact contact) {
+    public Contact update(UUID partnerId, UUID contactId, Contact contact) {
         return salesPartnerRepository.updateContact(partnerId, contactId, contact);
     }
 
     @Override
-    public void delete(Long partnerId, Long contactId) {
+    public void delete(UUID partnerId, UUID contactId) {
         salesPartnerRepository.deleteContact(partnerId, contactId);
     }
 }

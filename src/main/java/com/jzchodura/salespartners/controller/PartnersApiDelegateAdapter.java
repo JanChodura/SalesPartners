@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @ConditionalOnBean({SalesPartnerService.class, ContactService.class})
@@ -57,7 +58,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<PartnerDetailResponse> getPartnerDetail(Long partnerId) {
+    public ResponseEntity<PartnerDetailResponse> getPartnerDetail(UUID partnerId) {
         PartnerDetailResponse response = salesPartnerDtoMapper.toDetailResponse(
             salesPartnerService.getPartnerDetail(partnerId)
         );
@@ -65,7 +66,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<PartnerDetailResponse> updatePartner(Long partnerId, UpdatePartnerRequest updatePartnerRequest) {
+    public ResponseEntity<PartnerDetailResponse> updatePartner(UUID partnerId, UpdatePartnerRequest updatePartnerRequest) {
         PartnerDetailResponse response = salesPartnerDtoMapper.toDetailResponse(
             salesPartnerService.updatePartner(partnerId, salesPartnerDtoMapper.toDomain(updatePartnerRequest))
         );
@@ -73,7 +74,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ContactResponse> addContact(Long partnerId, CreateContactRequest createContactRequest) {
+    public ResponseEntity<ContactResponse> addContact(UUID partnerId, CreateContactRequest createContactRequest) {
         ContactResponse response = contactDtoMapper.toResponse(
             contactService.add(partnerId, contactDtoMapper.toDomain(createContactRequest))
         );
@@ -81,7 +82,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ContactResponse> updateContact(Long partnerId, Long contactId, CreateContactRequest body) {
+    public ResponseEntity<ContactResponse> updateContact(UUID partnerId, UUID contactId, CreateContactRequest body) {
         ContactResponse response = contactDtoMapper.toResponse(
             contactService.update(partnerId, contactId, contactDtoMapper.toDomain(body))
         );
@@ -89,19 +90,19 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> deleteContact(Long partnerId, Long contactId) {
+    public ResponseEntity<Void> deleteContact(UUID partnerId, UUID contactId) {
         contactService.delete(partnerId, contactId);
         return ResponseEntity.noContent().build();
     }
 
-    private URI partnerUri(Long partnerId) {
+    private URI partnerUri(UUID partnerId) {
         return ServletUriComponentsBuilder.fromCurrentRequestUri()
             .path("/{partnerId}")
             .buildAndExpand(partnerId)
             .toUri();
     }
 
-    private URI contactUri(Long contactId) {
+    private URI contactUri(UUID contactId) {
         return ServletUriComponentsBuilder.fromCurrentRequestUri()
             .path("/{contactId}")
             .buildAndExpand(contactId)
