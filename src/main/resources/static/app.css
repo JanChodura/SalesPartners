@@ -152,6 +152,18 @@ table {
     min-width: 640px;
 }
 
+.partners-name-col {
+    width: 50%;
+}
+
+.partners-status-col {
+    width: 16%;
+}
+
+.partners-id-col {
+    width: 34%;
+}
+
 thead {
     background: rgba(22, 49, 58, 0.05);
 }
