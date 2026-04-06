@@ -108,6 +108,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '200':
           description: Partner detail
@@ -158,6 +159,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 6
       requestBody:
         required: true
         content:
@@ -235,6 +237,7 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -290,12 +293,14 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
         - name: contactId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -345,12 +350,14 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
         - name: contactId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
       responses:
         '204':
           description: Contact removed or deactivated
@@ -377,9 +384,12 @@ components:
           type: integer
           format: int64
           example: 1
+          minimum: 1
         name:
           type: string
           example: Acme s.r.o.
+          minLength: 1
+          maxLength: 255
         partnerStatus:
           $ref: '#/components/schemas/PartnerStatus'
 
@@ -413,9 +423,12 @@ components:
           type: integer
           format: int64
           example: 1
+          minimum: 1
         name:
           type: string
           example: Acme s.r.o.
+          minLength: 2
+          maxLength: 255
         partnerStatus:
           $ref: '#/components/schemas/PartnerStatus'
         identifiers:
@@ -449,6 +462,8 @@ components:
         name:
           type: string
           example: Acme s.r.o.
+          minLength: 2
+          maxLength: 255
         identifiers:
           type: array
           items:
@@ -483,12 +498,17 @@ components:
           type: integer
           format: int64
           example: 10
+          minimum: 1
         firstName:
           type: string
           example: Jan
+          minLength: 2
+          maxLength: 100
         lastName:
           type: string
           example: Novak
+          minLength: 2
+          maxLength: 100
         position:
           $ref: '#/components/schemas/ContactPosition'
         primary:
@@ -497,12 +517,22 @@ components:
         countryCallingCode:
           type: string
           example: "+420"
+          minLength: 4
+          maxLength: 4
+          pattern: '^\+[0-9]{3}$'
+          default: "+420"
         phoneNumber:
           type: string
           example: "777888999"
+          minLength: 9
+          maxLength: 9
+          pattern: '^[0-9]{9}$'
         email:
           type: string
           example: jan.novak@acme.example
+          format: email
+          maxLength: 254
+          pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
 
     CreateContactRequest:
       type: object
@@ -519,9 +549,13 @@ components:
         firstName:
           type: string
           example: Jan
+          minLength: 2
+          maxLength: 100
         lastName:
           type: string
           example: Novak
+          minLength: 2
+          maxLength: 100
         position:
           $ref: '#/components/schemas/ContactPosition'
         isPrimary:
@@ -530,12 +564,22 @@ components:
         countryCallingCode:
           type: string
           example: "+420"
+          minLength: 4
+          maxLength: 4
+          pattern: '^\+[0-9]{3}$'
+          default: "+420"
         phoneNumber:
           type: string
           example: "777888999"
+          minLength: 9
+          maxLength: 9
+          pattern: '^[0-9]{9}$'
         email:
           type: string
           example: jan.novak@acme.example
+          format: email
+          maxLength: 254
+          pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
 
     UpdateContactRequest:
       $ref: '#/components/schemas/CreateContactRequest'
@@ -553,18 +597,30 @@ components:
         country:
           type: string
           example: CZ
+          minLength: 2
+          maxLength: 2
+          pattern: '^[A-Z]{2}$'
         city:
           type: string
           example: Prague
+          minLength: 1
+          maxLength: 100
         zipCode:
           type: string
           example: "11000"
+          minLength: 5
+          maxLength: 10
+          pattern: '^[0-9A-Za-z -]+$'
         street:
           type: string
           example: Wenceslas Square
+          minLength: 1
+          maxLength: 150
         streetNumber:
           type: string
           example: "1"
+          minLength: 1
+          maxLength: 20
 
     Identifier:
       type: object
@@ -576,6 +632,8 @@ components:
         value:
           type: string
           example: CZ12345678
+          minLength: 1
+          maxLength: 50
         type:
           $ref: '#/components/schemas/IdentifierType'
 
@@ -601,6 +659,10 @@ components:
         message:
           type: string
           example: Partner with id 999 was not found.
+          minLength: 1
+          maxLength: 500
         code:
           type: string
           example: PARTNER_NOT_FOUND
+          minLength: 1
+          maxLength: 100
