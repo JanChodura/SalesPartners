@@ -114,9 +114,18 @@ async function apiFetch(path, options = {}) {
 }
 
 function formatPhone(contact) {
-    const prefix = contact.countryCallingCode ?? "";
-    const number = contact.phoneNumber ?? "";
-    return `${prefix} ${number}`.trim() || "-";
+    const prefix = (contact.countryCallingCode ?? "").trim();
+    const number = (contact.phoneNumber ?? "").replace(/\s+/g, "");
+
+    if (!prefix && !number) {
+        return "-";
+    }
+
+    const groupedNumber = number
+        ? number.match(/.{1,3}/g)?.join(" ") ?? number
+        : "";
+
+    return [prefix, groupedNumber].filter(Boolean).join(" ");
 }
 
 function shortId(value) {
