@@ -43,7 +43,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     @Override
     public ResponseEntity<PartnerDetailResponse> createPartner(CreatePartnerRequest createPartnerRequest) {
         PartnerDetailResponse response = salesPartnerDtoMapper.toDetailResponse(
-            salesPartnerService.createPartner(salesPartnerDtoMapper.toDomain(createPartnerRequest))
+            salesPartnerService.create(salesPartnerDtoMapper.toDomain(createPartnerRequest))
         );
         return ResponseEntity.created(partnerUri(response.getId())).body(response);
     }
@@ -75,7 +75,7 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     @Override
     public ResponseEntity<ContactResponse> addContact(Long partnerId, CreateContactRequest createContactRequest) {
         ContactResponse response = contactDtoMapper.toResponse(
-            contactService.addContact(partnerId, contactDtoMapper.toDomain(createContactRequest))
+            contactService.add(partnerId, contactDtoMapper.toDomain(createContactRequest))
         );
         return ResponseEntity.created(contactUri(response.getId())).body(response);
     }
@@ -83,14 +83,14 @@ public class PartnersApiDelegateAdapter implements PartnersApiDelegate {
     @Override
     public ResponseEntity<ContactResponse> updateContact(Long partnerId, Long contactId, CreateContactRequest body) {
         ContactResponse response = contactDtoMapper.toResponse(
-            contactService.updateContact(partnerId, contactId, contactDtoMapper.toDomain(body))
+            contactService.update(partnerId, contactId, contactDtoMapper.toDomain(body))
         );
         return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<Void> deleteContact(Long partnerId, Long contactId) {
-        contactService.deleteContact(partnerId, contactId);
+        contactService.delete(partnerId, contactId);
         return ResponseEntity.noContent().build();
     }
 

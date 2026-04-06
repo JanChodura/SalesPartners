@@ -22,8 +22,8 @@ class SalesPartnerServiceIntegrationTest {
     private SalesPartnerService salesPartnerService;
 
     @Test
-    void createPartner_returnsCreatedPartner() {
-        SalesPartner createdPartner = salesPartnerService.createPartner(SalesPartnerUtil.createdPartner());
+    void createPartner_returnsCreated() {
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
 
         assertNotNull(createdPartner);
         assertEquals(TestIdsUtil.PARTNER_ID, createdPartner.id());

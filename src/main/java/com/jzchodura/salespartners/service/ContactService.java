@@ -4,9 +4,9 @@ import com.jzchodura.salespartners.model.Contact;
 
 public interface ContactService {
 
-    Contact addContact(Long partnerId, Contact contact);
+    Contact add(Long partnerId, Contact contact);
 
-    Contact updateContact(Long partnerId, Long contactId, Contact contact);
+    Contact update(Long partnerId, Long contactId, Contact contact);
 
-    void deleteContact(Long partnerId, Long contactId);
+    void delete(Long partnerId, Long contactId);
 }

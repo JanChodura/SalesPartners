@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SalesPartnerService {
 
-    SalesPartner createPartner(SalesPartner partner);
+    SalesPartner create(SalesPartner partner);
 
     List<SalesPartner> getPartners();
 

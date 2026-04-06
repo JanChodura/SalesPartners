@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
@@ -118,7 +119,7 @@ class PartnersApiE2ETest {
 
     @Test
     void deleteContact_returnsNoContent() throws Exception {
-        mockMvc.perform(delete("/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID))
             .andExpect(status().isNoContent());
     }
 
@@ -146,7 +147,7 @@ class PartnersApiE2ETest {
         SalesPartnerService salesPartnerService() {
             return new SalesPartnerService() {
                 @Override
-                public SalesPartner createPartner(SalesPartner partner) {
+                public SalesPartner create(SalesPartner partner) {
                     return SalesPartnerUtil.createdPartner();
                 }
 
@@ -172,17 +173,17 @@ class PartnersApiE2ETest {
         ContactService contactService() {
             return new ContactService() {
                 @Override
-                public Contact addContact(Long partnerId, Contact contact) {
+                public Contact add(Long partnerId, Contact contact) {
                     return ContactUtil.createdContact();
                 }
 
                 @Override
-                public Contact updateContact(Long partnerId, Long contactId, Contact contact) {
+                public Contact update(Long partnerId, Long contactId, Contact contact) {
                     return ContactUtil.updatedContact();
                 }
 
                 @Override
-                public void deleteContact(Long partnerId, Long contactId) {
+                public void delete(Long partnerId, Long contactId) {
                 }
             };
         }

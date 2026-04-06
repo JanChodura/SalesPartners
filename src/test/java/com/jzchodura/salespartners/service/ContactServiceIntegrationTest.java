@@ -21,16 +21,16 @@ class ContactServiceIntegrationTest {
     private ContactService contactService;
 
     @Test
-    void addContact_returnsCreatedContact() {
-        Contact createdContact = contactService.addContact(TestIdsUtil.PARTNER_ID, ContactUtil.createdContact());
+    void addContact_returnsCreated() {
+        Contact createdContact = contactService.add(TestIdsUtil.PARTNER_ID, ContactUtil.createdContact());
 
         assertNotNull(createdContact);
         assertEquals(TestIdsUtil.CONTACT_ID, createdContact.id());
     }
 
     @Test
-    void updateContact_returnsUpdatedContact() {
-        Contact updatedContact = contactService.updateContact(
+    void updateContact_returnsUpdated() {
+        Contact updatedContact = contactService.update(
             TestIdsUtil.PARTNER_ID,
             TestIdsUtil.CONTACT_ID,
             ContactUtil.updatedContact()
@@ -41,7 +41,7 @@ class ContactServiceIntegrationTest {
     }
 
     @Test
-    void deleteContact_completesSuccessfully() {
-        assertDoesNotThrow(() -> contactService.deleteContact(TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID));
+    void delete_completesSuccessfully() {
+        assertDoesNotThrow(() -> contactService.delete(TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID));
     }
 }
