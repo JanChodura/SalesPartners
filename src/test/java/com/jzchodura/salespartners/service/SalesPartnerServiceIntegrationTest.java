@@ -3,19 +3,19 @@ package com.jzchodura.salespartners.service;
 import com.jzchodura.salespartners.SalesPartnersApp;
 import com.jzchodura.salespartners.model.SalesPartner;
 import com.jzchodura.salespartners.util.SalesPartnerUtil;
-import com.jzchodura.salespartners.util.TestIdsUtil;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Disabled("Enable after SalesPartnerService implementation is registered as a Spring bean.")
 @SpringBootTest(classes = SalesPartnersApp.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class SalesPartnerServiceIntegrationTest {
 
     @Autowired
@@ -26,32 +26,40 @@ class SalesPartnerServiceIntegrationTest {
         SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
 
         assertNotNull(createdPartner);
-        assertEquals(TestIdsUtil.PARTNER_ID, createdPartner.id());
+        assertNotNull(createdPartner.id());
+        assertEquals("Acme", createdPartner.name());
     }
 
     @Test
     void getPartners_returnsPartnerList() {
+        salesPartnerService.create(SalesPartnerUtil.createdPartner());
+
         List<SalesPartner> partners = salesPartnerService.getPartners();
 
         assertNotNull(partners);
+        assertFalse(partners.isEmpty());
     }
 
     @Test
     void getPartnerDetail_returnsPartnerDetail() {
-        SalesPartner partner = salesPartnerService.getPartnerDetail(TestIdsUtil.PARTNER_ID);
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+        SalesPartner partner = salesPartnerService.getPartnerDetail(createdPartner.id());
 
         assertNotNull(partner);
-        assertEquals(TestIdsUtil.PARTNER_ID, partner.id());
+        assertEquals(createdPartner.id(), partner.id());
     }
 
     @Test
     void updatePartner_returnsUpdatedPartner() {
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+
         SalesPartner updatedPartner = salesPartnerService.updatePartner(
-            TestIdsUtil.PARTNER_ID,
+            createdPartner.id(),
             SalesPartnerUtil.updatedPartner()
         );
 
         assertNotNull(updatedPartner);
-        assertEquals(TestIdsUtil.PARTNER_ID, updatedPartner.id());
+        assertEquals(createdPartner.id(), updatedPartner.id());
+        assertEquals("Acme Gold", updatedPartner.name());
     }
 }

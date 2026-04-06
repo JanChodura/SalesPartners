@@ -2,46 +2,59 @@ package com.jzchodura.salespartners.service;
 
 import com.jzchodura.salespartners.SalesPartnersApp;
 import com.jzchodura.salespartners.model.Contact;
+import com.jzchodura.salespartners.model.SalesPartner;
 import com.jzchodura.salespartners.util.ContactUtil;
-import com.jzchodura.salespartners.util.TestIdsUtil;
-import org.junit.jupiter.api.Disabled;
+import com.jzchodura.salespartners.util.SalesPartnerUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Disabled("Enable after ContactService implementation is registered as a Spring bean.")
 @SpringBootTest(classes = SalesPartnersApp.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ContactServiceIntegrationTest {
 
     @Autowired
     private ContactService contactService;
 
+    @Autowired
+    private SalesPartnerService salesPartnerService;
+
     @Test
     void addContact_returnsCreated() {
-        Contact createdContact = contactService.add(TestIdsUtil.PARTNER_ID, ContactUtil.createdContact());
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+        Contact createdContact = contactService.add(createdPartner.id(), ContactUtil.createdContact());
 
         assertNotNull(createdContact);
-        assertEquals(TestIdsUtil.CONTACT_ID, createdContact.id());
+        assertNotNull(createdContact.id());
+        assertEquals("Jan", createdContact.firstName());
     }
 
     @Test
     void updateContact_returnsUpdated() {
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+        Contact createdContact = contactService.add(createdPartner.id(), ContactUtil.createdContact());
+
         Contact updatedContact = contactService.update(
-            TestIdsUtil.PARTNER_ID,
-            TestIdsUtil.CONTACT_ID,
+            createdPartner.id(),
+            createdContact.id(),
             ContactUtil.updatedContact()
         );
 
         assertNotNull(updatedContact);
-        assertEquals(TestIdsUtil.CONTACT_ID, updatedContact.id());
+        assertEquals(createdContact.id(), updatedContact.id());
+        assertEquals("Petr", updatedContact.firstName());
     }
 
     @Test
     void delete_completesSuccessfully() {
-        assertDoesNotThrow(() -> contactService.delete(TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID));
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+        Contact createdContact = contactService.add(createdPartner.id(), ContactUtil.createdContact());
+
+        assertDoesNotThrow(() -> contactService.delete(createdPartner.id(), createdContact.id()));
     }
 }
