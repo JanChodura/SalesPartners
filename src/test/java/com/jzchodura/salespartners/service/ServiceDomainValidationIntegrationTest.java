@@ -1,5 +1,6 @@
 package com.jzchodura.salespartners.service;
 
+import com.jzchodura.salespartners.exception.DuplicateResourceException;
 import com.jzchodura.salespartners.SalesPartnersApp;
 import com.jzchodura.salespartners.exception.ResourceNotFoundException;
 import com.jzchodura.salespartners.model.Address;
@@ -13,6 +14,7 @@ import com.jzchodura.salespartners.util.SalesPartnerUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = SalesPartnersApp.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ServiceDomainValidationIntegrationTest {
 
     @Autowired
@@ -142,5 +145,42 @@ class ServiceDomainValidationIntegrationTest {
         );
 
         assertTrue(exception.getMessage().startsWith("Partner with id "));
+    }
+
+    @Test
+    void createPartner_throws_whenPartnerWithSameIcoAlreadyExists() {
+        salesPartnerService.create(SalesPartnerUtil.createdPartner());
+
+        DuplicateResourceException exception = assertThrows(
+            DuplicateResourceException.class,
+            () -> salesPartnerService.create(SalesPartnerUtil.createdPartner())
+        );
+
+        assertEquals("Partner with ICO CZ12345678 already exists.", exception.getMessage());
+    }
+
+    @Test
+    void addContact_throws_whenContactWithSameEmailAlreadyExists() {
+        SalesPartner createdPartner = salesPartnerService.create(SalesPartnerUtil.createdPartner());
+
+        contactService.add(createdPartner.id(), ContactUtil.createdContact());
+
+        Contact duplicateContact = new Contact(
+            null,
+            "Petr",
+            "Svoboda",
+            ContactUtil.updatedContact().position(),
+            false,
+            "+420",
+            "123456789",
+            "jan.novak@example.com"
+        );
+
+        DuplicateResourceException exception = assertThrows(
+            DuplicateResourceException.class,
+            () -> contactService.add(createdPartner.id(), duplicateContact)
+        );
+
+        assertEquals("Contact already exists for partner %s.".formatted(createdPartner.id()), exception.getMessage());
     }
 }

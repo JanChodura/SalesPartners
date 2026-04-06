@@ -1,5 +1,6 @@
 package com.jzchodura.salespartners.controller;
 
+import com.jzchodura.salespartners.exception.DuplicateResourceException;
 import com.jzchodura.salespartners.exception.ResourceNotFoundException;
 import com.jzchodura.salespartners.generated.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -33,6 +34,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException exception) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), "BUSINESS_VALIDATION_ERROR");
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateResource(DuplicateResourceException exception) {
+        return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage(), "DUPLICATE_RESOURCE");
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
