@@ -57,7 +57,7 @@ function renderPartners() {
             <tr>
                 <td>${escapeHtml(partner.name)}</td>
                 <td><span class="status-pill ${statusClass}">${escapeHtml(partner.partnerStatus ?? "NEW")}</span></td>
-                <td>${escapeHtml(shortId(partner.id))}</td>
+                <td class="partners-id-value">${escapeHtml(partner.id ?? "-")}</td>
             </tr>
         `;
     }).join("");
@@ -126,10 +126,6 @@ function formatPhone(contact) {
         : "";
 
     return [prefix, groupedNumber].filter(Boolean).join(" ");
-}
-
-function shortId(value) {
-    return value ? `${value.slice(0, 8)}...` : "-";
 }
 
 function showMessage(message) {
