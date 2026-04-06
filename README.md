@@ -49,11 +49,20 @@ Spusť `SalesPartnersApp`.
 
 ### Spuštění z příkazové řádky
 
+Linux / macOS:
+
+```bash
+./gradlew bootRun
+```
+
+Windows PowerShell:
+
 ```powershell
 .\gradlew.bat bootRun
 ```
 
-Tento způsob spuštění použije výchozí profil `app`, takže se při startu automaticky načtou připravená in-memory data.
+Tento způsob spuštění použije výchozí profil `app`, při startu se automaticky načtou připravená in-memory data.
+Současně se provede i potřebný build aplikace, včetně generování OpenAPI zdrojových souborů.
 
 Po startu jsou dostupné:
 
@@ -62,6 +71,14 @@ Po startu jsou dostupné:
 - API: `http://localhost:8080/api`
 
 ## Build
+
+Linux / macOS:
+
+```bash
+./gradlew clean build
+```
+
+Windows PowerShell:
 
 ```powershell
 .\gradlew.bat clean build
@@ -72,6 +89,14 @@ OpenAPI zdrojové soubory se generují automaticky během buildu.
 ## Testy
 
 Spuštění všech testů:
+
+Linux / macOS:
+
+```bash
+./gradlew test
+```
+
+Windows PowerShell:
 
 ```powershell
 .\gradlew.bat test
