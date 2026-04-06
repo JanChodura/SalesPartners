@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Sales Partner API
   version: 1.0.0
-  description: API for managing sales partners and their contacts
+  description: API for managing sales partners and partner contacts
 
 servers:
   - url: http://localhost:8080/api
@@ -103,7 +103,7 @@ paths:
                 - id: "11111111-1111-1111-1111-111111111111"
                   name: Acme s.r.o.
                   partnerStatus: NEW
-                - id: 2
+                - id: "33333333-3333-3333-3333-333333333333"
                   name: Globex a.s.
                   partnerStatus: GOLD
         '500':
@@ -281,13 +281,13 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateContactRequest'
             example:
-              firstName: Jan
-              lastName: Novak
-              position: SALES
-              isPrimary: true
+              firstName: Petra
+              lastName: Dvorakova
+              position: SUPPORT
+              isPrimary: false
               countryCallingCode: "+420"
-              phoneNumber: "777888999"
-              email: jan.novak@acme.example
+              phoneNumber: "666555444"
+              email: petra.dvorakova@acme.example
       responses:
         '201':
           description: Contact created
@@ -301,14 +301,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ContactResponse'
               example:
-                id: "22222222-2222-2222-2222-222222222222"
-                firstName: Jan
-                lastName: Novak
-                position: SALES
-                primary: true
+                id: "44444444-4444-4444-4444-444444444444"
+                firstName: Petra
+                lastName: Dvorakova
+                position: SUPPORT
+                primary: false
                 countryCallingCode: "+420"
-                phoneNumber: "777888999"
-                email: jan.novak@acme.example
+                phoneNumber: "666555444"
+                email: petra.dvorakova@acme.example
         '400':
           description: Invalid request or business validation failed
           content:
@@ -449,6 +449,43 @@ components:
 
   schemas:
 
+    CreatePartnerRequest:
+      type: object
+      required: [name]
+      example:
+        name: Acme s.r.o.
+        identifiers:
+          - value: CZ12345678
+            type: ICO
+        addresses:
+          - country: CZ
+            city: Prague
+            zipCode: "11000"
+            street: Wenceslas Square
+            streetNumber: "1"
+      properties:
+        name:
+          type: string
+          example: Acme s.r.o.
+          minLength: 2
+          maxLength: 255
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifier'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+
+    UpdatePartnerRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreatePartnerRequest'
+        - type: object
+          properties:
+            partnerStatus:
+              $ref: '#/components/schemas/PartnerStatus'
+
     PartnerListItem:
       type: object
       required: [ id, name, partnerStatus ]
@@ -494,6 +531,14 @@ components:
             countryCallingCode: "+420"
             phoneNumber: "777888999"
             email: jan.novak@acme.example
+          - id: "44444444-4444-4444-4444-444444444444"
+            firstName: Petra
+            lastName: Dvorakova
+            position: SUPPORT
+            primary: false
+            countryCallingCode: "+420"
+            phoneNumber: "666555444"
+            email: petra.dvorakova@acme.example
       properties:
         id:
           type: string
@@ -519,55 +564,68 @@ components:
           items:
             $ref: '#/components/schemas/ContactResponse'
 
-    CreatePartnerRequest:
+    CreateContactRequest:
       type: object
-      required: [name]
+      required: [firstName, lastName]
       example:
-        name: Acme s.r.o.
-        identifiers:
-          - value: CZ12345678
-            type: ICO
-        addresses:
-          - country: CZ
-            city: Prague
-            zipCode: "11000"
-            street: Wenceslas Square
-            streetNumber: "1"
+        firstName: Petra
+        lastName: Dvorakova
+        position: SUPPORT
+        isPrimary: false
+        countryCallingCode: "+420"
+        phoneNumber: "666555444"
+        email: petra.dvorakova@acme.example
       properties:
-        name:
+        firstName:
           type: string
-          example: Acme s.r.o.
+          example: Jan
           minLength: 2
-          maxLength: 255
-        identifiers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Identifier'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
+          maxLength: 100
+        lastName:
+          type: string
+          example: Novak
+          minLength: 2
+          maxLength: 100
+        position:
+          $ref: '#/components/schemas/ContactPosition'
+        isPrimary:
+          type: boolean
+          example: true
+        countryCallingCode:
+          type: string
+          example: "+420"
+          minLength: 4
+          maxLength: 4
+          pattern: '^\+[0-9]{3}$'
+          default: "+420"
+        phoneNumber:
+          type: string
+          example: "777888999"
+          minLength: 9
+          maxLength: 9
+          pattern: '^[0-9]{9}$'
+        email:
+          type: string
+          example: jan.novak@acme.example
+          format: email
+          maxLength: 254
+          pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
 
-    UpdatePartnerRequest:
-      allOf:
-        - $ref: '#/components/schemas/CreatePartnerRequest'
-        - type: object
-          properties:
-            partnerStatus:
-              $ref: '#/components/schemas/PartnerStatus'
+    UpdateContactRequest:
+      $ref: '#/components/schemas/CreateContactRequest'
 
     ContactResponse:
       type: object
       required: [id, firstName, lastName]
       example:
-        id: "22222222-2222-2222-2222-222222222222"
-        firstName: Jan
-        lastName: Novak
-        position: SALES
-        primary: true
+        id: "44444444-4444-4444-4444-444444444444"
+        firstName: Petra
+        lastName: Dvorakova
+        position: SUPPORT
+        primary: false
         countryCallingCode: "+420"
-        phoneNumber: "777888999"
-        email: jan.novak@acme.example
+        phoneNumber: "666555444"
+        email: petra.dvorakova@acme.example
       properties:
         id:
           type: string
@@ -607,56 +665,6 @@ components:
           format: email
           maxLength: 254
           pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
-
-    CreateContactRequest:
-      type: object
-      required: [firstName, lastName]
-      example:
-        firstName: Jan
-        lastName: Novak
-        position: SALES
-        isPrimary: true
-        countryCallingCode: "+420"
-        phoneNumber: "777888999"
-        email: jan.novak@acme.example
-      properties:
-        firstName:
-          type: string
-          example: Jan
-          minLength: 2
-          maxLength: 100
-        lastName:
-          type: string
-          example: Novak
-          minLength: 2
-          maxLength: 100
-        position:
-          $ref: '#/components/schemas/ContactPosition'
-        isPrimary:
-          type: boolean
-          example: true
-        countryCallingCode:
-          type: string
-          example: "+420"
-          minLength: 4
-          maxLength: 4
-          pattern: '^\+[0-9]{3}$'
-          default: "+420"
-        phoneNumber:
-          type: string
-          example: "777888999"
-          minLength: 9
-          maxLength: 9
-          pattern: '^[0-9]{9}$'
-        email:
-          type: string
-          example: jan.novak@acme.example
-          format: email
-          maxLength: 254
-          pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
-
-    UpdateContactRequest:
-      $ref: '#/components/schemas/CreateContactRequest'
 
     Address:
       type: object
