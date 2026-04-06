@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: Sales Partner API
+  version: 1.0.0
+  description: API for managing sales partners and their contacts
+
+servers:
+  - url: http://localhost:8080/api
+
+tags:
+  - name: partners
+    description: Operations related to partners
+
+paths:
+
+  /partners:
+    post:
+      tags:
+        - partners
+      summary: Create partner
+      operationId: createPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartnerRequest'
+      responses:
+        '201':
+          description: Partner created
+          headers:
+            Location:
+              description: URL of the created partner
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerDetailResponse'
+
+    get:
+      tags:
+        - partners
+      summary: Get all partners
+      operationId: getPartners
+      responses:
+        '200':
+          description: List of partners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerListItem'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /partners/{partnerId}:
+    get:
+      tags:
+        - partners
+      summary: Get partner detail
+      operationId: getPartnerDetail
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Partner detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerDetailResponse'
+        '404':
+          description: Partner not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - partners
+      summary: Update partner
+      operationId: updatePartner
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartnerRequest'
+      responses:
+        '200':
+          description: Partner updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerDetailResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Partner not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /partners/{partnerId}/contacts:
+    post:
+      tags:
+        - partners
+      summary: Add contact to partner
+      operationId: addContact
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
+      responses:
+        '201':
+          description: Contact created
+          headers:
+            Location:
+              description: URL of the created contact
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactResponse'
+        '404':
+          description: Partner not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /partners/{partnerId}/contacts/{contactId}:
+    put:
+      tags:
+        - partners
+      summary: Update contact
+      operationId: updateContact
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactRequest'
+      responses:
+        '200':
+          description: Contact updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - partners
+      summary: Remove or deactivate contact
+      operationId: deleteContact
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Contact removed or deactivated
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+
+  schemas:
+
+    PartnerListItem:
+      type: object
+      required: [ id, name, partnerStatus ]
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        partnerStatus:
+          $ref: '#/components/schemas/PartnerStatus'
+
+    PartnerDetailResponse:
+      type: object
+      required: [ id, name, partnerStatus ]
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        partnerStatus:
+          $ref: '#/components/schemas/PartnerStatus'
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifier'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+
+    CreatePartnerRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identifier'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+
+    UpdatePartnerRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreatePartnerRequest'
+        - type: object
+          properties:
+            partnerStatus:
+              $ref: '#/components/schemas/PartnerStatus'
+
+    ContactResponse:
+      type: object
+      required: [id, firstName, lastName]
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        position:
+          $ref: '#/components/schemas/ContactPosition'
+        primary:
+          type: boolean
+        countryCallingCode:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+
+    CreateContactRequest:
+      type: object
+      required: [firstName, lastName]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        position:
+          $ref: '#/components/schemas/ContactPosition'
+        isPrimary:
+          type: boolean
+        countryCallingCode:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+
+    UpdateContactRequest:
+      $ref: '#/components/schemas/CreateContactRequest'
+
+    Address:
+      type: object
+      required: [country, city]
+      properties:
+        country:
+          type: string
+        city:
+          type: string
+        zipCode:
+          type: string
+        street:
+          type: string
+        streetNumber:
+          type: string
+
+    Identifier:
+      type: object
+      required: [value, type]
+      properties:
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/IdentifierType'
+
+    IdentifierType:
+      type: string
+      enum: [ICO, VAT, OTHER]
+
+    ContactPosition:
+      type: string
+      enum: [EXECUTIVE, SALES, ACCOUNT_MANAGER, TECHNICAL, FINANCE, SUPPORT, OTHER]
+
+    PartnerStatus:
+      type: string
+      enum: [NEW, STANDARD, GOLD, INACTIVE]
+
+    ErrorResponse:
+      type: object
+      required: [ message ]
+      properties:
+        message:
+          type: string
+        code:
+          type: string
