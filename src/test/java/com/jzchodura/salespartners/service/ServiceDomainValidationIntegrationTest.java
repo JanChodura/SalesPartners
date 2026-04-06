@@ -39,7 +39,7 @@ class ServiceDomainValidationIntegrationTest {
             null,
             List.of(new Identifier("CZ12345678", IdentifierType.ICO)),
             " ",
-            List.of(new Address("CZ", "Prague", "11000", "Hlavni", "12")),
+            List.of(new Address("CZ", "Praha", "11000", "Hlavni", "12")),
             PartnerStatus.NEW,
             List.of()
         );
@@ -58,7 +58,7 @@ class ServiceDomainValidationIntegrationTest {
             null,
             List.of(),
             "Acme",
-            List.of(new Address("CZ", "Prague", "11000", "Hlavni", "12")),
+            List.of(new Address("CZ", "Praha", "11000", "Hlavni", "12")),
             PartnerStatus.NEW,
             List.of()
         );
@@ -96,7 +96,7 @@ class ServiceDomainValidationIntegrationTest {
         Contact invalidContact = new Contact(
             null,
             " ",
-            "Novak",
+            "Novák",
             ContactUtil.createdContact().position(),
             true,
             "+420",

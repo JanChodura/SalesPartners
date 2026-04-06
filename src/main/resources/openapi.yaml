@@ -468,9 +468,9 @@ components:
             type: ICO
         addresses:
           - country: CZ
-            city: Prague
+            city: Praha
             zipCode: "11000"
-            street: Wenceslas Square
+            street: Václavské Náměstí
             streetNumber: "1"
       properties:
         name:
@@ -527,14 +527,14 @@ components:
             type: ICO
         addresses:
           - country: CZ
-            city: Prague
+            city: Praha
             zipCode: "11000"
-            street: Wenceslas Square
+            street: Václavské Náměstí
             streetNumber: "1"
         contacts:
           - id: "22222222-2222-2222-2222-222222222222"
             firstName: Jan
-            lastName: Novak
+            lastName: Novák
             position: SALES
             primary: true
             countryCallingCode: "+420"
@@ -592,7 +592,7 @@ components:
           maxLength: 100
         lastName:
           type: string
-          example: Novak
+          example: Novák
           minLength: 2
           maxLength: 100
         position:
@@ -647,7 +647,7 @@ components:
           maxLength: 100
         lastName:
           type: string
-          example: Novak
+          example: Novák
           minLength: 2
           maxLength: 100
         position:
@@ -680,9 +680,9 @@ components:
       required: [country, city]
       example:
         country: CZ
-        city: Prague
+        city: Praha
         zipCode: "11000"
-        street: Wenceslas Square
+        street: Václavské Náměstí
         streetNumber: "1"
       properties:
         country:
@@ -693,7 +693,7 @@ components:
           pattern: '^[A-Z]{2}$'
         city:
           type: string
-          example: Prague
+          example: Praha
           minLength: 1
           maxLength: 100
         zipCode:
@@ -704,7 +704,7 @@ components:
           pattern: '^[0-9A-Za-z -]+$'
         street:
           type: string
-          example: Wenceslas Square
+          example: Václavské Náměstí
           minLength: 1
           maxLength: 150
         streetNumber:

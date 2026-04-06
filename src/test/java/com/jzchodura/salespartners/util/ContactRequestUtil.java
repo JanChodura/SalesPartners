@@ -9,7 +9,7 @@ public final class ContactRequestUtil {
     }
 
     public static CreateContactRequest createContactRequest() {
-        CreateContactRequest request = new CreateContactRequest("Jan", "Novak");
+        CreateContactRequest request = new CreateContactRequest("Jan", "Novák");
         request.setPosition(ContactPosition.SALES);
         request.setIsPrimary(true);
         request.setCountryCallingCode("+420");

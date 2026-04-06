@@ -18,7 +18,7 @@ public final class SalesPartnerUtil {
             TestIdsUtil.PARTNER_ID,
             List.of(new Identifier("CZ12345678", IdentifierType.ICO)),
             "Acme",
-            List.of(new Address("CZ", "Prague", "11000", "Hlavni", "12")),
+            List.of(new Address("CZ", "Praha", "11000", "Hlavni", "12")),
             PartnerStatus.NEW,
             List.of(ContactUtil.createdContact())
         );

@@ -12,7 +12,7 @@ public final class ContactUtil {
         return new Contact(
             TestIdsUtil.CONTACT_ID,
             "Jan",
-            "Novak",
+            "Novák",
             ContactPosition.SALES,
             true,
             "+420",

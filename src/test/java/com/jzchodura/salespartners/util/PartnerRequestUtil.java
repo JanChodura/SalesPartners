@@ -17,7 +17,7 @@ public final class PartnerRequestUtil {
     public static CreatePartnerRequest createPartnerRequest() {
         CreatePartnerRequest request = new CreatePartnerRequest("Acme");
         request.setIdentifiers(List.of(new Identifier("CZ12345678", IdentifierType.ICO)));
-        request.setAddresses(List.of(new Address("CZ", "Prague").street("Main").streetNumber("12").zipCode("11000")));
+        request.setAddresses(List.of(new Address("CZ", "Praha").street("Main").streetNumber("12").zipCode("11000")));
         return request;
     }
 

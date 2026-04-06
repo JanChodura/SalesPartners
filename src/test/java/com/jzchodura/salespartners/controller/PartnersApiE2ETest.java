@@ -57,7 +57,7 @@ class PartnersApiE2ETest {
             .andExpect(jsonPath("$.name").value("Acme"))
             .andExpect(jsonPath("$.partnerStatus").value("NEW"))
             .andExpect(jsonPath("$.identifiers[0].value").value("CZ12345678"))
-            .andExpect(jsonPath("$.addresses[0].city").value("Prague"))
+            .andExpect(jsonPath("$.addresses[0].city").value("Praha"))
             .andExpect(jsonPath("$.contacts[0].firstName").value("Jan"));
     }
 
