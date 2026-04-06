@@ -48,11 +48,11 @@ class PartnersApiE2ETest {
 
     @Test
     void createPartner_returnsCreatedPartner() throws Exception {
-        mockMvc.perform(post("/partners")
+        mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PartnerRequestUtil.createPartnerRequest())))
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", "http://localhost/partners/" + TestIdsUtil.PARTNER_ID))
+            .andExpect(header().string("Location", "http://localhost/api/partners/" + TestIdsUtil.PARTNER_ID))
             .andExpect(jsonPath("$.id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$.name").value("Acme"))
             .andExpect(jsonPath("$.partnerStatus").value("NEW"))
@@ -63,7 +63,7 @@ class PartnersApiE2ETest {
 
     @Test
     void getPartners_returnsPartnerList() throws Exception {
-        mockMvc.perform(get("/partners"))
+        mockMvc.perform(get("/api/partners"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$[0].name").value("Acme"))
@@ -72,7 +72,7 @@ class PartnersApiE2ETest {
 
     @Test
     void getPartnerDetail_returnsPartnerDetail() throws Exception {
-        mockMvc.perform(get("/partners/{partnerId}", TestIdsUtil.PARTNER_ID))
+        mockMvc.perform(get("/api/partners/{partnerId}", TestIdsUtil.PARTNER_ID))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(TestIdsUtil.PARTNER_ID.toString()))
             .andExpect(jsonPath("$.name").value("Acme"))
@@ -82,7 +82,7 @@ class PartnersApiE2ETest {
 
     @Test
     void updatePartner_returnsUpdatedPartner() throws Exception {
-        mockMvc.perform(put("/partners/{partnerId}", TestIdsUtil.PARTNER_ID)
+        mockMvc.perform(put("/api/partners/{partnerId}", TestIdsUtil.PARTNER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PartnerRequestUtil.updatePartnerRequest())))
             .andExpect(status().isOk())
@@ -95,11 +95,11 @@ class PartnersApiE2ETest {
 
     @Test
     void addContact_returnsCreatedContact() throws Exception {
-        mockMvc.perform(post("/partners/{partnerId}/contacts", TestIdsUtil.PARTNER_ID)
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", TestIdsUtil.PARTNER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ContactRequestUtil.createContactRequest())))
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", "http://localhost/partners/" + TestIdsUtil.PARTNER_ID + "/contacts/" + TestIdsUtil.CONTACT_ID))
+            .andExpect(header().string("Location", "http://localhost/api/partners/" + TestIdsUtil.PARTNER_ID + "/contacts/" + TestIdsUtil.CONTACT_ID))
             .andExpect(jsonPath("$.id").value(TestIdsUtil.CONTACT_ID.toString()))
             .andExpect(jsonPath("$.firstName").value("Jan"))
             .andExpect(jsonPath("$.position").value("SALES"))
@@ -108,7 +108,7 @@ class PartnersApiE2ETest {
 
     @Test
     void updateContact_returnsUpdatedContact() throws Exception {
-        mockMvc.perform(put("/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID)
+        mockMvc.perform(put("/api/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ContactRequestUtil.updateContactRequest())))
             .andExpect(status().isOk())
@@ -120,7 +120,7 @@ class PartnersApiE2ETest {
 
     @Test
     void deleteContact_returnsNoContent() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/partners/{partnerId}/contacts/{contactId}", TestIdsUtil.PARTNER_ID, TestIdsUtil.CONTACT_ID))
             .andExpect(status().isNoContent());
     }
 

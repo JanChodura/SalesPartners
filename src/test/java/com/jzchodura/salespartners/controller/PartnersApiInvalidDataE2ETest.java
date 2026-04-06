@@ -42,7 +42,7 @@ class PartnersApiInvalidDataE2ETest {
         CreatePartnerRequest request = PartnerRequestUtil.createPartnerRequest();
         request.setName(" ");
 
-        mockMvc.perform(post("/partners")
+        mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isBadRequest())
@@ -54,7 +54,7 @@ class PartnersApiInvalidDataE2ETest {
         CreatePartnerRequest request = PartnerRequestUtil.createPartnerRequest();
         request.setIdentifiers(List.of());
 
-        mockMvc.perform(post("/partners")
+        mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isBadRequest())
@@ -67,7 +67,7 @@ class PartnersApiInvalidDataE2ETest {
         CreateContactRequest request = ContactRequestUtil.createContactRequest();
         request.setEmail("not-an-email");
 
-        mockMvc.perform(post("/partners/{partnerId}/contacts", UUID.randomUUID())
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isBadRequest())
@@ -76,7 +76,7 @@ class PartnersApiInvalidDataE2ETest {
 
     @Test
     void getPartnerDetail_returnsBadRequest_whenPartnerIdIsNotUuid() throws Exception {
-        mockMvc.perform(get("/partners/{partnerId}", "not-a-uuid"))
+        mockMvc.perform(get("/api/partners/{partnerId}", "not-a-uuid"))
             .andExpect(status().isBadRequest());
     }
 
@@ -84,7 +84,7 @@ class PartnersApiInvalidDataE2ETest {
     void updatePartner_returnsNotFound_whenPartnerDoesNotExist() throws Exception {
         UpdatePartnerRequest request = PartnerRequestUtil.updatePartnerRequest();
 
-        mockMvc.perform(put("/partners/{partnerId}", UUID.randomUUID())
+        mockMvc.perform(put("/api/partners/{partnerId}", UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isNotFound())
@@ -99,12 +99,12 @@ class PartnersApiInvalidDataE2ETest {
         secondPrimaryContact.setEmail("second.primary@example.com");
         secondPrimaryContact.setPhoneNumber("123456789");
 
-        mockMvc.perform(post("/partners/{partnerId}/contacts", partnerId)
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", partnerId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(firstPrimaryContact)))
             .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/partners/{partnerId}/contacts", partnerId)
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", partnerId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(secondPrimaryContact)))
             .andExpect(status().isBadRequest())
@@ -116,12 +116,12 @@ class PartnersApiInvalidDataE2ETest {
     void createPartner_returnsConflict_whenPartnerWithSameIcoAlreadyExists() throws Exception {
         CreatePartnerRequest request = PartnerRequestUtil.createPartnerRequest();
 
-        mockMvc.perform(post("/partners")
+        mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/partners")
+        mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isConflict())
@@ -134,7 +134,7 @@ class PartnersApiInvalidDataE2ETest {
         UUID partnerId = createPartnerAndReturnId();
         CreateContactRequest request = ContactRequestUtil.createContactRequest();
 
-        mockMvc.perform(post("/partners/{partnerId}/contacts", partnerId)
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", partnerId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated());
@@ -143,7 +143,7 @@ class PartnersApiInvalidDataE2ETest {
         duplicateRequest.setEmail(request.getEmail());
         duplicateRequest.setPhoneNumber("123456789");
 
-        mockMvc.perform(post("/partners/{partnerId}/contacts", partnerId)
+        mockMvc.perform(post("/api/partners/{partnerId}/contacts", partnerId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(duplicateRequest)))
             .andExpect(status().isConflict())
@@ -152,7 +152,7 @@ class PartnersApiInvalidDataE2ETest {
     }
 
     private UUID createPartnerAndReturnId() throws Exception {
-        MvcResult result = mockMvc.perform(post("/partners")
+        MvcResult result = mockMvc.perform(post("/api/partners")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PartnerRequestUtil.createPartnerRequest())))
             .andExpect(status().isCreated())
