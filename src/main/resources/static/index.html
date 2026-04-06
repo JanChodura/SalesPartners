@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Partners</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<main class="page-shell">
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Sales Partners</p>
+            <h1>Live overview of partners and contacts.</h1>
+            <p class="hero-copy">
+                The page refreshes itself from the API, so changes made in Swagger appear here automatically without a browser reload.
+            </p>
+        </div>
+        <div class="hero-stats">
+            <article>
+                <span id="partner-count">0</span>
+                <p>Partners</p>
+            </article>
+            <article>
+                <span id="contact-count">0</span>
+                <p>Contacts</p>
+            </article>
+            <article>
+                <span id="last-sync">-</span>
+                <p>Last sync</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="panel panel-table">
+        <div class="panel-head">
+            <h2>Partners</h2>
+            <p>All partners loaded from <code>GET /api/partners</code>.</p>
+        </div>
+        <div id="message-box" class="message-box hidden" role="status" aria-live="polite"></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>ID</th>
+                </tr>
+                </thead>
+                <tbody id="partners-table-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel panel-highlight">
+        <div class="panel-head">
+            <h2>Contacts</h2>
+            <p>Contacts aggregated from partner detail endpoints.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Partner</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Primary</th>
+                </tr>
+                </thead>
+                <tbody id="contacts-table-body"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,22 +1,32 @@
 package com.jzchodura.salespartners.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.jzchodura.salespartners.model.SalesPartner;
+import com.jzchodura.salespartners.service.ContactService;
+import com.jzchodura.salespartners.service.SalesPartnerService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("app")
 class LoadDatabase {
 
-  private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+    @Bean
+    CommandLineRunner initDatabase(
+        SalesPartnerService salesPartnerService,
+        ContactService contactService
+    ) {
+        return args -> {
+            if (!salesPartnerService.getPartners().isEmpty()) {
+                return;
+            }
 
-  @Bean
-  CommandLineRunner initDatabase() {
+            SalesPartner northwind = salesPartnerService.create(PreparedData.northwindPartner());
+            contactService.add(northwind.id(), PreparedData.northwindContact());
 
-    return args -> {
-      //log.info("Preloading " + repository.save(new Employee("Bilbo Baggins", "burglar")));
-      //log.info("Preloading " + repository.save(new Employee("Frodo Baggins", "thief")));
-    };
-  }
+            SalesPartner initech = salesPartnerService.create(PreparedData.initechPartner());
+            contactService.add(initech.id(), PreparedData.initechContact());
+        };
+    }
 }
