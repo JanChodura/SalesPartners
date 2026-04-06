@@ -53,6 +53,8 @@ Spusť `SalesPartnersApp`.
 .\gradlew.bat bootRun
 ```
 
+Tento způsob spuštění použije výchozí profil `app`, takže se při startu automaticky načtou připravená in-memory data.
+
 Po startu jsou dostupné:
 
 - aplikace a dashboard: `http://localhost:8080/`
@@ -68,6 +70,8 @@ Po startu jsou dostupné:
 OpenAPI zdrojové soubory se generují automaticky během buildu.
 
 ## Testy
+
+Spuštění všech testů:
 
 ```powershell
 .\gradlew.bat test
