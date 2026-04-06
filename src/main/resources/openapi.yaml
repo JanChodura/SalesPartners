@@ -25,6 +25,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePartnerRequest'
+            example:
+              name: Acme s.r.o.
+              identifiers:
+                - value: CZ12345678
+                  type: ICO
+                - value: CZ12345678
+                  type: VAT
+              addresses:
+                - country: CZ
+                  city: Prague
+                  zipCode: "11000"
+                  street: Wenceslas Square
+                  streetNumber: "1"
       responses:
         '201':
           description: Partner created
@@ -37,6 +50,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerDetailResponse'
+              example:
+                id: 1
+                name: Acme s.r.o.
+                partnerStatus: NEW
+                identifiers:
+                  - value: CZ12345678
+                    type: ICO
+                  - value: CZ12345678
+                    type: VAT
+                addresses:
+                  - country: CZ
+                    city: Prague
+                    zipCode: "11000"
+                    street: Wenceslas Square
+                    streetNumber: "1"
+                contacts: []
 
     get:
       tags:
@@ -52,6 +81,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PartnerListItem'
+              example:
+                - id: 1
+                  name: Acme s.r.o.
+                  partnerStatus: NEW
+                - id: 2
+                  name: Globex a.s.
+                  partnerStatus: GOLD
         '500':
           description: Internal server error
           content:
@@ -79,6 +115,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerDetailResponse'
+              example:
+                id: 1
+                name: Acme s.r.o.
+                partnerStatus: GOLD
+                identifiers:
+                  - value: CZ12345678
+                    type: ICO
+                  - value: CZ12345678
+                    type: VAT
+                addresses:
+                  - country: CZ
+                    city: Prague
+                    zipCode: "11000"
+                    street: Wenceslas Square
+                    streetNumber: "1"
+                contacts:
+                  - id: 10
+                    firstName: Jan
+                    lastName: Novak
+                    position: SALES
+                    primary: true
+                    countryCallingCode: "+420"
+                    phoneNumber: "777888999"
+                    email: jan.novak@acme.example
         '404':
           description: Partner not found
           content:
@@ -104,6 +164,20 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdatePartnerRequest'
+            example:
+              name: Acme Enterprise s.r.o.
+              partnerStatus: GOLD
+              identifiers:
+                - value: CZ12345678
+                  type: ICO
+                - value: CZ12345678
+                  type: VAT
+              addresses:
+                - country: CZ
+                  city: Brno
+                  zipCode: "60200"
+                  street: Ceska
+                  streetNumber: "15"
       responses:
         '200':
           description: Partner updated
@@ -111,6 +185,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerDetailResponse'
+              example:
+                id: 1
+                name: Acme Enterprise s.r.o.
+                partnerStatus: GOLD
+                identifiers:
+                  - value: CZ12345678
+                    type: ICO
+                  - value: CZ12345678
+                    type: VAT
+                addresses:
+                  - country: CZ
+                    city: Brno
+                    zipCode: "60200"
+                    street: Ceska
+                    streetNumber: "15"
+                contacts:
+                  - id: 10
+                    firstName: Jan
+                    lastName: Novak
+                    position: ACCOUNT_MANAGER
+                    primary: true
+                    countryCallingCode: "+420"
+                    phoneNumber: "777888999"
+                    email: jan.novak@acme.example
         '400':
           description: Invalid request
           content:
@@ -143,6 +241,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateContactRequest'
+            example:
+              firstName: Jan
+              lastName: Novak
+              position: SALES
+              isPrimary: true
+              countryCallingCode: "+420"
+              phoneNumber: "777888999"
+              email: jan.novak@acme.example
       responses:
         '201':
           description: Contact created
@@ -155,6 +261,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContactResponse'
+              example:
+                id: 10
+                firstName: Jan
+                lastName: Novak
+                position: SALES
+                primary: true
+                countryCallingCode: "+420"
+                phoneNumber: "777888999"
+                email: jan.novak@acme.example
         '404':
           description: Partner not found
           content:
@@ -187,6 +302,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateContactRequest'
+            example:
+              firstName: Petr
+              lastName: Svoboda
+              position: ACCOUNT_MANAGER
+              isPrimary: false
+              countryCallingCode: "+420"
+              phoneNumber: "111222333"
+              email: petr.svoboda@acme.example
       responses:
         '200':
           description: Contact updated
@@ -194,6 +317,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContactResponse'
+              example:
+                id: 10
+                firstName: Petr
+                lastName: Svoboda
+                position: ACCOUNT_MANAGER
+                primary: false
+                countryCallingCode: "+420"
+                phoneNumber: "111222333"
+                email: petr.svoboda@acme.example
         '404':
           description: Not found
           content:
@@ -236,24 +368,54 @@ components:
     PartnerListItem:
       type: object
       required: [ id, name, partnerStatus ]
+      example:
+        id: 1
+        name: Acme s.r.o.
+        partnerStatus: NEW
       properties:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
+          example: Acme s.r.o.
         partnerStatus:
           $ref: '#/components/schemas/PartnerStatus'
 
     PartnerDetailResponse:
       type: object
       required: [ id, name, partnerStatus ]
+      example:
+        id: 1
+        name: Acme s.r.o.
+        partnerStatus: NEW
+        identifiers:
+          - value: CZ12345678
+            type: ICO
+        addresses:
+          - country: CZ
+            city: Prague
+            zipCode: "11000"
+            street: Wenceslas Square
+            streetNumber: "1"
+        contacts:
+          - id: 10
+            firstName: Jan
+            lastName: Novak
+            position: SALES
+            primary: true
+            countryCallingCode: "+420"
+            phoneNumber: "777888999"
+            email: jan.novak@acme.example
       properties:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
+          example: Acme s.r.o.
         partnerStatus:
           $ref: '#/components/schemas/PartnerStatus'
         identifiers:
@@ -272,9 +434,21 @@ components:
     CreatePartnerRequest:
       type: object
       required: [name]
+      example:
+        name: Acme s.r.o.
+        identifiers:
+          - value: CZ12345678
+            type: ICO
+        addresses:
+          - country: CZ
+            city: Prague
+            zipCode: "11000"
+            street: Wenceslas Square
+            streetNumber: "1"
       properties:
         name:
           type: string
+          example: Acme s.r.o.
         identifiers:
           type: array
           items:
@@ -295,43 +469,73 @@ components:
     ContactResponse:
       type: object
       required: [id, firstName, lastName]
+      example:
+        id: 10
+        firstName: Jan
+        lastName: Novak
+        position: SALES
+        primary: true
+        countryCallingCode: "+420"
+        phoneNumber: "777888999"
+        email: jan.novak@acme.example
       properties:
         id:
           type: integer
           format: int64
+          example: 10
         firstName:
           type: string
+          example: Jan
         lastName:
           type: string
+          example: Novak
         position:
           $ref: '#/components/schemas/ContactPosition'
         primary:
           type: boolean
+          example: true
         countryCallingCode:
           type: string
+          example: "+420"
         phoneNumber:
           type: string
+          example: "777888999"
         email:
           type: string
+          example: jan.novak@acme.example
 
     CreateContactRequest:
       type: object
       required: [firstName, lastName]
+      example:
+        firstName: Jan
+        lastName: Novak
+        position: SALES
+        isPrimary: true
+        countryCallingCode: "+420"
+        phoneNumber: "777888999"
+        email: jan.novak@acme.example
       properties:
         firstName:
           type: string
+          example: Jan
         lastName:
           type: string
+          example: Novak
         position:
           $ref: '#/components/schemas/ContactPosition'
         isPrimary:
           type: boolean
+          example: true
         countryCallingCode:
           type: string
+          example: "+420"
         phoneNumber:
           type: string
+          example: "777888999"
         email:
           type: string
+          example: jan.novak@acme.example
 
     UpdateContactRequest:
       $ref: '#/components/schemas/CreateContactRequest'
@@ -339,24 +543,39 @@ components:
     Address:
       type: object
       required: [country, city]
+      example:
+        country: CZ
+        city: Prague
+        zipCode: "11000"
+        street: Wenceslas Square
+        streetNumber: "1"
       properties:
         country:
           type: string
+          example: CZ
         city:
           type: string
+          example: Prague
         zipCode:
           type: string
+          example: "11000"
         street:
           type: string
+          example: Wenceslas Square
         streetNumber:
           type: string
+          example: "1"
 
     Identifier:
       type: object
       required: [value, type]
+      example:
+        value: CZ12345678
+        type: ICO
       properties:
         value:
           type: string
+          example: CZ12345678
         type:
           $ref: '#/components/schemas/IdentifierType'
 
@@ -375,8 +594,13 @@ components:
     ErrorResponse:
       type: object
       required: [ message ]
+      example:
+        message: Partner with id 999 was not found.
+        code: PARTNER_NOT_FOUND
       properties:
         message:
           type: string
+          example: Partner with id 999 was not found.
         code:
           type: string
+          example: PARTNER_NOT_FOUND
