@@ -8,15 +8,17 @@ servers:
   - url: http://localhost:8080/api
 
 tags:
-  - name: partners
-    description: Operations related to partners
+  - name: partner
+    description: Operations related to sales partners
+  - name: contact
+    description: Operations related to partner contacts
 
 paths:
 
   /partners:
     post:
       tags:
-        - partners
+        - partner
       summary: Create partner
       operationId: createPartner
       requestBody:
@@ -87,7 +89,7 @@ paths:
 
     get:
       tags:
-        - partners
+        - partner
       summary: Get all partners
       operationId: getPartners
       responses:
@@ -119,7 +121,7 @@ paths:
   /partners/{partnerId}:
     get:
       tags:
-        - partners
+        - partner
       summary: Get partner detail
       operationId: getPartnerDetail
       parameters:
@@ -172,7 +174,7 @@ paths:
 
     put:
       tags:
-        - partners
+        - partner
       summary: Update partner
       operationId: updatePartner
       parameters:
@@ -264,7 +266,7 @@ paths:
   /partners/{partnerId}/contacts:
     post:
       tags:
-        - partners
+        - contact
       summary: Add contact to partner
       operationId: addContact
       parameters:
@@ -340,7 +342,7 @@ paths:
   /partners/{partnerId}/contacts/{contactId}:
     put:
       tags:
-        - partners
+        - contact
       summary: Update contact
       operationId: updateContact
       parameters:
@@ -416,7 +418,7 @@ paths:
 
     delete:
       tags:
-        - partners
+        - contact
       summary: Remove or deactivate contact
       operationId: deleteContact
       parameters:

@@ -1,3 +1,7 @@
+springdoc:
+  swagger-ui:
+    operationsSorter: alpha
+
 openapi:
   salesPartner:
     base-path: /

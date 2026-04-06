@@ -2,7 +2,8 @@ package com.jzchodura.salespartners.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jzchodura.salespartners.SalesPartnersApp;
-import com.jzchodura.salespartners.generated.api.PartnersApiDelegate;
+import com.jzchodura.salespartners.generated.api.ContactApiDelegate;
+import com.jzchodura.salespartners.generated.api.PartnerApiDelegate;
 import com.jzchodura.salespartners.mapper.api.ContactDtoMapper;
 import com.jzchodura.salespartners.mapper.api.SalesPartnerDtoMapper;
 import com.jzchodura.salespartners.model.Contact;
@@ -128,16 +129,24 @@ class PartnersApiE2ETest {
 
         @Bean
         @Primary
-        PartnersApiDelegate partnersApiDelegate(
+        PartnerApiDelegate partnerApiDelegate(
             SalesPartnerService salesPartnerService,
+            SalesPartnerDtoMapper salesPartnerDtoMapper
+        ) {
+            return new PartnerApiDelegateAdapter(
+                salesPartnerService,
+                salesPartnerDtoMapper
+            );
+        }
+
+        @Bean
+        @Primary
+        ContactApiDelegate contactApiDelegate(
             ContactService contactService,
-            SalesPartnerDtoMapper salesPartnerDtoMapper,
             ContactDtoMapper contactDtoMapper
         ) {
-            return new PartnersApiDelegateAdapter(
-                salesPartnerService,
+            return new ContactApiDelegateAdapter(
                 contactService,
-                salesPartnerDtoMapper,
                 contactDtoMapper
             );
         }
