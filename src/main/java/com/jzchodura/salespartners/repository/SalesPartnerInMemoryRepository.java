@@ -1,5 +1,6 @@
 package com.jzchodura.salespartners.repository;
 
+import com.jzchodura.salespartners.exception.ResourceNotFoundException;
 import com.jzchodura.salespartners.model.Contact;
 import com.jzchodura.salespartners.model.SalesPartner;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -101,7 +101,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
             }
         }
 
-        throw new NoSuchElementException("Contact with id %s was not found for partner %s.".formatted(contactId, partnerId));
+        throw new ResourceNotFoundException("Contact with id %s was not found for partner %s.".formatted(contactId, partnerId));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
             .toList();
 
         if (updatedContacts.size() == safeList(partner.contacts()).size()) {
-            throw new NoSuchElementException("Contact with id %s was not found for partner %s.".formatted(contactId, partnerId));
+            throw new ResourceNotFoundException("Contact with id %s was not found for partner %s.".formatted(contactId, partnerId));
         }
 
         partners.put(partnerId, withContacts(partner, updatedContacts));
@@ -121,7 +121,7 @@ public class SalesPartnerInMemoryRepository implements SalesPartnerRepository {
     private SalesPartner getRequiredPartner(UUID partnerId) {
         SalesPartner partner = partners.get(partnerId);
         if (partner == null) {
-            throw new NoSuchElementException("Partner with id %s was not found.".formatted(partnerId));
+            throw new ResourceNotFoundException("Partner with id %s was not found.".formatted(partnerId));
         }
         return partner;
     }
