@@ -33,7 +33,7 @@ final class PreparedData {
         return new Contact(
             null,
             "Lucie",
-            "Kralova",
+            "Králová",
             ContactPosition.EXECUTIVE,
             true,
             "+420",
