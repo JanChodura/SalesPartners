@@ -100,7 +100,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PartnerListItem'
+                  $ref: '#/components/schemas/PartnerListItemDTO'
               example:
                 - id: "11111111-1111-1111-1111-111111111111"
                   name: Acme s.r.o.
@@ -481,11 +481,11 @@ components:
         identifiers:
           type: array
           items:
-            $ref: '#/components/schemas/Identifier'
+            $ref: '#/components/schemas/IdentifierDTO'
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/Address'
+            $ref: '#/components/schemas/AddressDTO'
 
     UpdatePartnerRequest:
       allOf:
@@ -493,9 +493,9 @@ components:
         - type: object
           properties:
             partnerStatus:
-              $ref: '#/components/schemas/PartnerStatus'
+              $ref: '#/components/schemas/PartnerStatusDTO'
 
-    PartnerListItem:
+    PartnerListItemDTO:
       type: object
       required: [ id, name, partnerStatus ]
       example:
@@ -513,7 +513,7 @@ components:
           minLength: 1
           maxLength: 255
         partnerStatus:
-          $ref: '#/components/schemas/PartnerStatus'
+          $ref: '#/components/schemas/PartnerStatusDTO'
 
     PartnerDetailResponse:
       type: object
@@ -559,15 +559,15 @@ components:
           minLength: 2
           maxLength: 255
         partnerStatus:
-          $ref: '#/components/schemas/PartnerStatus'
+          $ref: '#/components/schemas/PartnerStatusDTO'
         identifiers:
           type: array
           items:
-            $ref: '#/components/schemas/Identifier'
+            $ref: '#/components/schemas/IdentifierDTO'
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/Address'
+            $ref: '#/components/schemas/AddressDTO'
         contacts:
           type: array
           items:
@@ -596,7 +596,7 @@ components:
           minLength: 2
           maxLength: 100
         position:
-          $ref: '#/components/schemas/ContactPosition'
+          $ref: '#/components/schemas/ContactPositionDTO'
         isPrimary:
           type: boolean
           example: true
@@ -651,7 +651,7 @@ components:
           minLength: 2
           maxLength: 100
         position:
-          $ref: '#/components/schemas/ContactPosition'
+          $ref: '#/components/schemas/ContactPositionDTO'
         primary:
           type: boolean
           example: true
@@ -675,7 +675,7 @@ components:
           maxLength: 254
           pattern: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
 
-    Address:
+    AddressDTO:
       type: object
       required: [country, city]
       example:
@@ -713,7 +713,7 @@ components:
           minLength: 1
           maxLength: 20
 
-    Identifier:
+    IdentifierDTO:
       type: object
       required: [value, type]
       example:
@@ -726,17 +726,17 @@ components:
           minLength: 1
           maxLength: 50
         type:
-          $ref: '#/components/schemas/IdentifierType'
+          $ref: '#/components/schemas/IdentifierTypeDTO'
 
-    IdentifierType:
+    IdentifierTypeDTO:
       type: string
       enum: [ICO, VAT, OTHER]
 
-    ContactPosition:
+    ContactPositionDTO:
       type: string
       enum: [EXECUTIVE, SALES, ACCOUNT_MANAGER, TECHNICAL, FINANCE, SUPPORT, OTHER]
 
-    PartnerStatus:
+    PartnerStatusDTO:
       type: string
       enum: [NEW, STANDARD, GOLD, INACTIVE]
 
