@@ -1,8 +1,10 @@
 package com.jzchodura.salespartners.mapper.api;
 
 import com.jzchodura.salespartners.generated.dto.ContactResponse;
+import com.jzchodura.salespartners.generated.dto.ContactPositionDTO;
 import com.jzchodura.salespartners.generated.dto.CreateContactRequest;
 import com.jzchodura.salespartners.model.Contact;
+import com.jzchodura.salespartners.model.ContactPosition;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,15 +36,11 @@ public class ContactDtoMapper {
         return response;
     }
 
-    private com.jzchodura.salespartners.model.ContactPosition toDomain(
-        com.jzchodura.salespartners.generated.dto.ContactPosition position
-    ) {
-        return position == null ? null : com.jzchodura.salespartners.model.ContactPosition.valueOf(position.getValue());
+    private ContactPosition toDomain(ContactPositionDTO position) {
+        return position == null ? null : ContactPosition.valueOf(position.getValue());
     }
 
-    private com.jzchodura.salespartners.generated.dto.ContactPosition toDto(
-        com.jzchodura.salespartners.model.ContactPosition position
-    ) {
-        return position == null ? null : com.jzchodura.salespartners.generated.dto.ContactPosition.fromValue(position.name());
+    private ContactPositionDTO toDto(ContactPosition position) {
+        return position == null ? null : ContactPositionDTO.fromValue(position.name());
     }
 }

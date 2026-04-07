@@ -1,11 +1,17 @@
 package com.jzchodura.salespartners.mapper.api;
 
+import com.jzchodura.salespartners.generated.dto.AddressDTO;
 import com.jzchodura.salespartners.generated.dto.CreatePartnerRequest;
+import com.jzchodura.salespartners.generated.dto.IdentifierDTO;
+import com.jzchodura.salespartners.generated.dto.IdentifierTypeDTO;
 import com.jzchodura.salespartners.generated.dto.PartnerDetailResponse;
-import com.jzchodura.salespartners.generated.dto.PartnerListItem;
+import com.jzchodura.salespartners.generated.dto.PartnerListItemDTO;
+import com.jzchodura.salespartners.generated.dto.PartnerStatusDTO;
 import com.jzchodura.salespartners.generated.dto.UpdatePartnerRequest;
 import com.jzchodura.salespartners.model.Address;
 import com.jzchodura.salespartners.model.Identifier;
+import com.jzchodura.salespartners.model.IdentifierType;
+import com.jzchodura.salespartners.model.PartnerStatus;
 import com.jzchodura.salespartners.model.SalesPartner;
 import org.springframework.stereotype.Component;
 
@@ -58,37 +64,37 @@ public class SalesPartnerDtoMapper {
         return response;
     }
 
-    public PartnerListItem toListItem(SalesPartner partner) {
-        PartnerListItem item = new PartnerListItem();
+    public PartnerListItemDTO toListItem(SalesPartner partner) {
+        PartnerListItemDTO item = new PartnerListItemDTO();
         item.setId(partner.id());
         item.setName(partner.name());
         item.setPartnerStatus(toDto(partner.state()));
         return item;
     }
 
-    private List<Identifier> mapIdentifiersToDomain(List<com.jzchodura.salespartners.generated.dto.Identifier> identifiers) {
+    private List<Identifier> mapIdentifiersToDomain(List<IdentifierDTO> identifiers) {
         return safeList(identifiers).stream()
             .map(identifier -> new Identifier(
                 identifier.getValue(),
                 identifier.getType() == null
                     ? null
-                    : com.jzchodura.salespartners.model.IdentifierType.valueOf(identifier.getType().getValue())
+                    : IdentifierType.valueOf(identifier.getType().getValue())
             ))
             .toList();
     }
 
-    private List<com.jzchodura.salespartners.generated.dto.Identifier> mapIdentifiersToDto(List<Identifier> identifiers) {
+    private List<IdentifierDTO> mapIdentifiersToDto(List<Identifier> identifiers) {
         return safeList(identifiers).stream()
-            .map(identifier -> new com.jzchodura.salespartners.generated.dto.Identifier(
+            .map(identifier -> new IdentifierDTO(
                 identifier.value(),
                 identifier.type() == null
                     ? null
-                    : com.jzchodura.salespartners.generated.dto.IdentifierType.fromValue(identifier.type().name())
+                    : IdentifierTypeDTO.fromValue(identifier.type().name())
             ))
             .toList();
     }
 
-    private List<Address> mapAddressesToDomain(List<com.jzchodura.salespartners.generated.dto.Address> addresses) {
+    private List<Address> mapAddressesToDomain(List<AddressDTO> addresses) {
         return safeList(addresses).stream()
             .map(address -> new Address(
                 address.getCountry(),
@@ -100,9 +106,9 @@ public class SalesPartnerDtoMapper {
             .toList();
     }
 
-    private List<com.jzchodura.salespartners.generated.dto.Address> mapAddressesToDto(List<Address> addresses) {
+    private List<AddressDTO> mapAddressesToDto(List<Address> addresses) {
         return safeList(addresses).stream()
-            .map(address -> new com.jzchodura.salespartners.generated.dto.Address(
+            .map(address -> new AddressDTO(
                 address.country(),
                 address.city()
             )
@@ -112,16 +118,12 @@ public class SalesPartnerDtoMapper {
             .toList();
     }
 
-    private com.jzchodura.salespartners.model.PartnerStatus toDomain(
-        com.jzchodura.salespartners.generated.dto.PartnerStatus status
-    ) {
-        return status == null ? null : com.jzchodura.salespartners.model.PartnerStatus.valueOf(status.getValue());
+    private PartnerStatus toDomain(PartnerStatusDTO status) {
+        return status == null ? null : PartnerStatus.valueOf(status.getValue());
     }
 
-    private com.jzchodura.salespartners.generated.dto.PartnerStatus toDto(
-        com.jzchodura.salespartners.model.PartnerStatus status
-    ) {
-        return status == null ? null : com.jzchodura.salespartners.generated.dto.PartnerStatus.fromValue(status.name());
+    private PartnerStatusDTO toDto(PartnerStatus status) {
+        return status == null ? null : PartnerStatusDTO.fromValue(status.name());
     }
 
     private <T> List<T> safeList(List<T> values) {

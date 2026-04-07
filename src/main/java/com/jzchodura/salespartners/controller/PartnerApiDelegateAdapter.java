@@ -3,7 +3,7 @@ package com.jzchodura.salespartners.controller;
 import com.jzchodura.salespartners.generated.api.PartnerApiDelegate;
 import com.jzchodura.salespartners.generated.dto.CreatePartnerRequest;
 import com.jzchodura.salespartners.generated.dto.PartnerDetailResponse;
-import com.jzchodura.salespartners.generated.dto.PartnerListItem;
+import com.jzchodura.salespartners.generated.dto.PartnerListItemDTO;
 import com.jzchodura.salespartners.generated.dto.UpdatePartnerRequest;
 import com.jzchodura.salespartners.mapper.api.SalesPartnerDtoMapper;
 import com.jzchodura.salespartners.service.SalesPartnerService;
@@ -40,8 +40,8 @@ public class PartnerApiDelegateAdapter implements PartnerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<PartnerListItem>> getPartners() {
-        List<PartnerListItem> response = salesPartnerService.getPartners().stream()
+    public ResponseEntity<List<PartnerListItemDTO>> getPartners() {
+        List<PartnerListItemDTO> response = salesPartnerService.getPartners().stream()
             .map(salesPartnerDtoMapper::toListItem)
             .toList();
         return ResponseEntity.ok(response);
